@@ -1,3 +1,10 @@
+casalite (5.1.2-1kern1) bionic; urgency=medium
+
+  * build for bionic
+  * New upstream version 5.1.2
+
+ -- KERN packaging <packaging@kernsuite.info>  Thu, 10 May 2018 15:40:51 +0200
+
 casalite (4.7.2-1) xenial; urgency=medium
 
   * new upstream release
