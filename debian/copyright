@@ -1,10 +1,9 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: casalite
-Source: <url://example.com>
+Upstream-Name: casa
+Source: https://casa.nrao.edu/
 
 Files: *
-Copyright: <years> <put author's name and email here>
-           <years> <likewise for another author>
+Copyright: NRAO
 License: GPL-2.0+
 
 Files: debian/*

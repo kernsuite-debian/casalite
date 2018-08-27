@@ -1,3 +1,9 @@
+casalite (5.3.0-1) bionic; urgency=medium
+
+  * new upstream release
+
+ -- KERN packaging <packaging@kernsuite.info>  Mon, 27 Aug 2018 20:06:28 +0200
+
 casalite (4.7.2-1) xenial; urgency=medium
 
   * new upstream release

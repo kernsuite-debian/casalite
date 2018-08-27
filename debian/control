@@ -10,6 +10,22 @@ Vcs-Browser: https://github.com/kernsuite-debian/casalite
 
 Package: casalite
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libfreetype6, libsm6, libxi6, libxrender1, libxrandr2, libxfixes3, libxcursor1, libxinerama1, libfontconfig1, libxslt1.1, xauth, xvfb, dbus-x11, python-tk
+Depends: 
+ ${shlibs:Depends},
+ ${misc:Depends},
+ libfreetype6,
+ libsm6,
+ libxi6,
+ libxrender1,
+ libxrandr2,
+ libxfixes3,
+ libxcursor1,
+ libxinerama1,
+ libfontconfig1,
+ libxslt1.1,
+ xauth,
+ xvfb,
+ dbus-x11,
+ python-tk
 Description: Common Astronomy Software Application
  this is the original binary distribution without CARTA and demo files
