@@ -1,5 +1,5 @@
-VERSION=5.1.1
-RELEASE=casa-release-${VERSION}-5.el7
+VERSION=5.3.0
+RELEASE=casa-release-${VERSION}-143.el7
 
 all: pack
 
