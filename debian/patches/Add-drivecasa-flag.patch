@@ -1,0 +1,29 @@
+Description: Add drivecasa flags that disabled colors in term
+
+--- casalite-5.4.0.orig/lib/python2.7/start_casa.py
++++ casalite-5.4.0/lib/python2.7/start_casa.py
+@@ -59,6 +59,9 @@ try:
+     __parse.add_argument( '--iplog',dest='ipython_log',default=False,
+                           const=True,action='store_const',
+                           help='create ipython log' )
++    __parse.add_argument('--drivecasa', dest='drivecasa', default=False,
++                          const=True, action='store_const',
++                          help='Set to drivecasa mode')
+     __defaults,__trash = __parse.parse_known_args( )
+     from IPython import __version__ as _ipython_version_
+ 
+@@ -66,6 +69,14 @@ try:
+     __configs.TerminalInteractiveShell.ipython_dir = __defaults.rcdir.decode('unicode-escape') + "/ipython"
+     __configs.TerminalInteractiveShell.banner1 = 'IPython %s -- An enhanced Interactive Python.\n\n' % _ipython_version_
+     __configs.TerminalInteractiveShell.banner2 = ''
++    if __defaults.drivecasa:
++        __configs.InteractiveShell.color_info = False
++        __configs.InteractiveShell.colors = 'NoColor'
++        __configs.TerminalInteractiveShell.color_info = False
++        __configs.TerminalInteractiveShell.colors = 'NoColor'
++        __configs.TerminalInteractiveShell.highlighting_style = 'legacy'
++        __configs.TerminalInteractiveShell.simple_prompt = True
++
+     __configs.HistoryManager.hist_file = __configs.TerminalInteractiveShell.ipython_dir + "/history.sqlite"
+     __configs.TerminalIPythonApp.matplotlib = __defaults.backend
+ 

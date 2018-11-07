@@ -1,5 +1,7 @@
-VERSION=5.3.0
-RELEASE=casa-release-${VERSION}-143.el7
+.PHONY: all pack
+
+VERSION=5.4.0
+RELEASE=casa-release-${VERSION}-68.el7
 
 all: pack
 
@@ -7,11 +9,11 @@ ${RELEASE}.tar.gz:
 	wget https://casa.nrao.edu/download/distro/linux/release/el7/${RELEASE}.tar.gz
 
 ${RELEASE}/: ${RELEASE}.tar.gz
-	tar zxvf ${RELEASE}.tar.gz
+	tar zxmvf ${RELEASE}.tar.gz
 
 casalite-${VERSION}/: ${RELEASE}/
 	cp -a ${RELEASE}/ casalite-${VERSION}/
-	rm -rf casalite-${VERSION}/Pipeline-CASA51-P2-B.40896
+	rm -rf casalite-${VERSION}/Pipeline-CASA*
 	rm -rf casalite-${VERSION}/pipeline
 	rm -rf casalite-${VERSION}/etc/carta
 

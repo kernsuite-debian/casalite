@@ -1,3 +1,10 @@
+casalite (5.4.0-1) bionic; urgency=medium
+
+  [ Gijs Molenaar ]
+  * New upstream version 5.4.0
+
+ -- KERN packaging <packaging@kernsuite.info>  Fri, 19 Oct 2018 14:00:57 +0200
+
 casalite (5.3.0-143-1) bionic; urgency=medium
 
   * new upstream release
