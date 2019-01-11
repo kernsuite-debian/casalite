@@ -1,14 +1,14 @@
-opt/casalite/bin/asdm2MS usr/bin/casa
-opt/casalite/bin/bdflags2MS usr/bin/casa
-opt/casalite/bin/buildmytasks usr/bin/casa
+opt/casalite/bin/asdm2MS usr/bin/asdm2MS
+opt/casalite/bin/bdflags2MS usr/bin/bdflags2MS
+opt/casalite/bin/buildmytasks usr/bin/buildmytasks
 opt/casalite/bin/casa usr/bin/casa
-opt/casalite/bin/casa-config usr/bin/casa
-opt/casalite/bin/casabrowser usr/bin/casa
-opt/casalite/bin/casafeather usr/bin/casa
-opt/casalite/bin/casalogger usr/bin/casa
-opt/casalite/bin/casaplotms usr/bin/casa
-opt/casalite/bin/casaviewer usr/bin/casa
-opt/casalite/bin/mpicasa usr/bin/casa
-opt/casalite/bin/msuvbin usr/bin/casa
+opt/casalite/bin/casa-config usr/bin/casa-config
+opt/casalite/bin/casabrowser usr/bin/casabrowser
+opt/casalite/bin/casafeather usr/bin/casafeather
+opt/casalite/bin/casalogger usr/bin/casalogger
+opt/casalite/bin/casaplotms usr/bin/casaplotms
+opt/casalite/bin/casaviewer usr/bin/casaviewer
+opt/casalite/bin/mpicasa usr/bin/mpicasa
+opt/casalite/bin/msuvbin usr/bin/msuvbin
 
 
