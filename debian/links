@@ -1,2 +1,14 @@
+opt/casalite/bin/asdm2MS usr/bin/casa
+opt/casalite/bin/bdflags2MS usr/bin/casa
+opt/casalite/bin/buildmytasks usr/bin/casa
 opt/casalite/bin/casa usr/bin/casa
+opt/casalite/bin/casa-config usr/bin/casa
+opt/casalite/bin/casabrowser usr/bin/casa
+opt/casalite/bin/casafeather usr/bin/casa
+opt/casalite/bin/casalogger usr/bin/casa
+opt/casalite/bin/casaplotms usr/bin/casa
+opt/casalite/bin/casaviewer usr/bin/casa
+opt/casalite/bin/mpicasa usr/bin/casa
+opt/casalite/bin/msuvbin usr/bin/casa
+
 
