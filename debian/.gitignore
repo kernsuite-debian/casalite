@@ -1,0 +1,6 @@
+.debhelper/
+casalite.debhelper.log
+casalite.substvars
+casalite/
+files
+

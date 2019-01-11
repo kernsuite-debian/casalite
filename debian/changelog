@@ -1,3 +1,19 @@
+casalite (5.4.1-1kern2) bionic; urgency=medium
+
+  * Add libgssapi-krb5-2 dependency
+
+ -- KERN packaging <packaging@kernsuite.info>  Fri, 11 Jan 2019 09:19:57 +0200
+
+casalite (5.4.1-1) bionic; urgency=medium
+
+  [ Gijs Molenaar ]
+  * Initial upstream branch.
+  * new release
+  * cleanup package more
+  * New upstream version 5.4.1
+
+ -- KERN packaging <packaging@kernsuite.info>  Thu, 10 Jan 2019 13:58:04 +0200
+
 casalite (5.4.0-1) bionic; urgency=medium
 
   [ Gijs Molenaar ]

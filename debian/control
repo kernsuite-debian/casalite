@@ -26,6 +26,7 @@ Depends:
  xauth,
  xvfb,
  dbus-x11,
- python-tk
+ python-tk,
+ libgssapi-krb5-2
 Description: Common Astronomy Software Application
  this is the original binary distribution without CARTA and demo files

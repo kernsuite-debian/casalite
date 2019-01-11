@@ -1,7 +1,7 @@
 .PHONY: all pack
 
-VERSION=5.4.0
-RELEASE=casa-release-${VERSION}-68.el7
+VERSION=5.4.1
+RELEASE=casa-release-${VERSION}-31.el7
 
 all: pack
 
@@ -16,6 +16,9 @@ casalite-${VERSION}/: ${RELEASE}/
 	rm -rf casalite-${VERSION}/Pipeline-CASA*
 	rm -rf casalite-${VERSION}/pipeline
 	rm -rf casalite-${VERSION}/etc/carta
+	rm -rf casalite-${VERSION}/data/alma
+	rm -rf casalite-${VERSION}/data/demo
+	rm -rf casalite-${VERSION}/share/doc
 
 casalite-${VERSION}.tar.xz: casalite-${VERSION}/
 	tar Jcvf casalite-${VERSION}.tar.xz casalite-${VERSION}/
