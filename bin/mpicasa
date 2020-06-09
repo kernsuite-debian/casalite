@@ -1,0 +1,36 @@
+#!/bin/bash
+ROOT="$(dirname $(readlink -e $0))"/../lib/mpi
+export LD_LIBRARY_PATH="$ROOT/lib${LD_LIBRARY_PATH:+":$LD_LIBRARY_PATH"}" 
+export OPAL_PREFIX=$ROOT 
+
+# default to 1 thread to avoid accidental oversubscription
+# can be overriden by environment
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
+
+# try to figure out if we need to launch a xterm for interactivity
+INTERACTIVE="yes"
+PIPELINE="no"
+SCRIPTING="no"
+for arg in "$@"
+do
+    if [ "$arg" = "--pipeline" ]; then
+        PIPELINE="yes"
+        INTERACTIVE="yes"
+    elif [ "$arg" = "-c" ]; then
+        SCRIPTING="yes"
+        INTERACTIVE="no"
+    fi
+done
+
+if [ "$PIPELINE" = "yes" ] && [ "$SCRIPTING" = "yes" ]; then
+    INTERACTIVE="no"
+fi
+
+XTERM=""
+if [ -n "$DISPLAY" ] && [ "$INTERACTIVE" = "yes" ] && command -v xterm >/dev/null 2>&1; then
+    XTERM="-xterm 0"
+fi
+
+EXPCP=${CASAPATH:+"-x CASAPATH"}
+
+exec -a casa $ROOT/bin/mpirun $XTERM -x OMP_NUM_THREADS -x PATH -x LD_LIBRARY_PATH $EXPCP --prefix $ROOT "$@"

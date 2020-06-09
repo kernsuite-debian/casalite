@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+use File::Basename;
+use Cwd 'abs_path';
+use File::Path;
+use File::Copy "move";
+
+abs_path($0) =~ m|^(.*)/lib/casa/bin/.*|;
+unless( -d $1 ) { die "could not find application contents" }
+$prefix = $1;
+
+chdir( "$prefix" ) or die "bad casa root: $prefix";
+
+if ( -e "pipeline" or -l "pipeline" ) {
+    chomp($date_string = `date "+%Y%m%d-%H%M%S"`);
+    move("pipeline","pipeline.$date_string");
+}
+open( RSYNC, "rsync -avz --copy-links rsync://casa-rsync.nrao.edu/casa-pipeline/current/ pipeline/ 2>&1 |" ) or die $!;
+@output = ( );
+$limit = 3;
+$msg = '...';
+foreach ( <RSYNC> ) {
+    if ( scalar(@output) < $limit ) {
+        if ( $verbose ) { print "\t$_" }
+    }
+    push( @output, $_ );
+    if ( scalar(@output) > $limit ) {
+        shift(@output);
+    }
+}
+close(RSYNC);
+if ( scalar(@output) > 0 ) { print "\t$msg\n" }
+foreach ( @output ) {
+    print "\t$_";
+}
