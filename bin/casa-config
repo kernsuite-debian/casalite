@@ -1,0 +1,172 @@
+#!/usr/bin/perl
+use File::Basename;
+use Cwd 'abs_path';
+use Cwd 'getcwd';
+use File::Path;
+
+$installpath = abs_path(dirname(abs_path($0)) . "/..");
+$path        = normalize_path($installpath,$0);
+$binary      = basename($path);
+
+$ENV{CASA_INSTALLATION_TYPE} = 'tar-installation';
+
+$ENV{PATH} = "$installpath/bin:$installpath/lib/casa/bin:/usr/bin:/usr/X11R6/bin:$ENV{PATH}";
+
+$version="5.6.0-rel-60";
+$revision="1";
+$srcurl="1";
+$arch="linux";
+
+$mplrc="$installpath/share/matplotlib";
+$pythonhome="$installpath";
+$pythonpath="$installpath/lib/python2.7:$installpath/lib/python2.7/heuristics:$installpath/lib/python2.7/site-packages";
+$casapython="$installpath/lib/python2.7";
+$tcltklib="$installpath/share";
+$qtplugin="$installpath/plugins";
+$pgplot="$installpath/lib/pgplot";
+
+$HOME = $ENV{HOME};
+$os = `uname -s`;
+$exec_with_sh = 0;
+
+sub usage {
+    my $status = shift(@_);
+
+    my $msg = <<'EOF';
+Usage: casa-config [OPTION]
+
+   --help               print this message
+   --version            print CASA version information
+   --prefix             print CASA install root
+   --revision           print CASA source revision information
+   --e[xec] <command>   setup CASA environment and exec a cmd
+   --sh-exec <command>  setup CASA environment and exec a cmd with /bin/sh
+
+EOF
+    print $msg;
+    exit $status;
+}
+
+sub execute {
+    my $cmd = shift(@_);
+
+    ## Wed Feb 17 10:29:37 EST 2016 after discussion with jkern
+    delete $ENV{LD_LIBRARY_PATH};
+    if ( exists $ENV{CASALD_LIBRARY_PATH} ) {
+        $ENV{LD_LIBRARY_PATH} = $ENV{CASALD_LIBRARY_PATH}
+    }
+
+    ####
+    #### setup matplotlib...
+    ####
+    if ( ! exists $ENV{MATPLOTLIBRC} && $mplrc ) {
+        $ENV{MATPLOTLIBRC} = $mplrc;
+    }
+
+    ####
+    ####    where fontList.cache...
+    ####    mixing this with different versions of python causes problems...
+    ####
+    $ENV{MPLCONFIGDIR} = "$HOME/.casa/matplotlib";
+    if ( ! -d $ENV{MPLCONFIGDIR} ) {
+	mkpath($ENV{MPLCONFIGDIR});
+    }
+    if ( ! -d $ENV{MPLCONFIGDIR} ) {
+        print "could not create matplotlib config directory: $ENV{MPLCONFIGDIR}\n";
+        exit 1;
+    }
+
+    if ( $pythonhome ) {
+        $ENV{PYTHONHOME} = $pythonhome;
+    }
+    if ( "$pythonpath" ) {
+        my $old = (exists $ENV{PYTHONPATH} ? ":$ENV{PYTHONPATH}" : '');
+        $ENV{PYTHONPATH} = "$pythonpath:$old";
+    }
+    if ( $casapython ) {
+        $ENV{__CASAPY_PYTHONDIR} = $casapython;
+    }
+
+    if ( $tcltklib ) {
+        $ENV{TCL_LIBRARY} = "$tcltklib/tcl";
+        $ENV{TK_LIBRARY} = "$tcltklib/tk";
+    }
+    if ( $qtplugin ) {
+        $ENV{QT_PLUGIN_PATH} = $qtplugin;
+    }
+    if ( $pgplot ) {
+        $ENV{PGPLOT_FONT} = "$pgplot/grfont.dat";
+        $ENV{PGPLOT_RGB} = "$pgplot/rgb.txt";
+    }
+
+    $ENV{CASAPATH} = "$installpath $arch";
+
+    if ( $exec_with_sh ) {
+        my $c = shift(@$cmd);
+        my @quoted = ( );
+        foreach ( <@$cmd> ) {
+            s|([)(*\s?])|\\$1|g;
+            push( @quoted, $_ );
+        }
+        exec '/bin/sh', '-c', join( ' ', $c, @quoted );
+    } else {
+        exec { $$cmd[0] } @$cmd;
+    }
+    exit(0);
+}
+
+if ( scalar(@ARGV) <= 0 ) {
+    usage 1;
+}
+
+while ( scalar(@ARGV) > 0 ) {
+    $_ = shift(@ARGV);
+    if ( m|^--help$| ) { usage 0 }
+    elsif ( m|^--version$| ) { print "$version\n" }
+    elsif ( m|^--prefix$| ) { print "$installpath\n" }
+    elsif ( m|^--revision$| ) { print "$revision\n" }
+    elsif ( m|^--src$| ) { print "$srcurl\n" }
+    elsif ( m|^--e(?:xec)?$| ) { 
+        if ( scalar(@ARGV) < 1 ) { usage 1 }
+        execute \@ARGV;
+    } elsif ( m|^--sh-exec$| ) { 
+        if ( scalar(@ARGV) < 1 ) { usage 1 }
+        $exec_with_sh = 1;
+        execute \@ARGV;
+    }
+}
+
+exit 0;
+
+sub normalize_path {
+    my $divider = '/';
+    my $root = shift(@_);        ## installation root
+    my $path = shift(@_);        ## path to script ($0)
+
+    sub normalize_worker {
+        # clean path
+        my @path = ( );
+        foreach my $e (@_) {
+            if ( $e eq '..' ) { pop(@path) }
+            elsif ( $e ne '.' ) {
+                my $path = join($divider,@path,$e);
+                # encountered symlink and still outside of installation directory
+                if ( -l $path && $path !~ m|^$root| ) {
+                    @path = normalize_worker(@path,split($divider,readlink($path)));
+                } else {
+                    push(@path,$e);
+                }
+            }
+        }
+
+        # reconstruct path
+        return @path;
+    }
+
+    # relative path
+    if ( substr($path,0,1) ne $divider ) {
+        $path = getcwd( ) . $divider . $path;
+    }
+
+    return join('/', normalize_worker( split($divider,$path) ) );
+}

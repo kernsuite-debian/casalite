@@ -1,0 +1,32 @@
+CASA Linux Distribution
+---------------------------------------------------------------------------
+To setup your environment to use CASA, add the root directory of the
+unpacked CASA distribution to your PATH environment variable. For
+example, if you unpacked the 4.4.0 casa distribution:
+
+    tar xf casa-release-4.4.0-el6.tar.gz
+
+you could setup your environment to use CASA in bash like:
+
+    cd casa-release-4.4.0-el6/bin
+    PATH=`pwd`:$PATH
+
+or if you use tcsh, you could setup your environment like:
+
+    cd casa-release-4.4.0-el6/bin
+    setenv PATH `pwd`:$PATH
+
+You can use the casa-config script for extra information about this
+distribution and for configuration. For example, to find the version
+number of this distribution:
+
+    casa-config --version
+
+or to install a package into this CASA distribution:
+
+    casa-config --exec python setup.py
+
+If you would like more information about CASA, please visit:
+
+    http://casa.nrao.edu/
+

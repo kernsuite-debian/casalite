@@ -1,0 +1,21 @@
+#!/bin/sh
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
+
+# try to figure out if we need to launch a xterm for interactivity
+INTERACTIVE="yes"
+for arg in "$@"
+do
+    if [ "$arg" = "--pipeline" ] || [ "$arg" = "-c" ]; then
+        INTERACTIVE="no"
+    fi
+done
+
+XTERM=""
+if [ -n "$DISPLAY" ] && [ "$INTERACTIVE" = "yes" ] && command -v xterm >/dev/null 2>&1; then
+    XTERM="-xterm 0"
+fi
+
+EXPCP=${CASAPATH:+"-x CASAPATH"}
+EXPLDLIB=${LD_LIBRARY_PATH:+"-x LD_LIBRARY_PATH"}
+
+exec /opt/casa/02/bin/mpirun $XTERM -x OMP_NUM_THREADS -x PATH $EXPLDLIB $EXPCP "$@"

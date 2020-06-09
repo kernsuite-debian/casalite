@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use File::Basename;
+use Cwd 'abs_path';
+use Cwd 'getcwd';
+
+$path = dirname(abs_path($0));
+$xvfb = '';
+
+if ( -x "/usr/bin/Xvfb" ) { $xvfb = "/usr/bin/Xvfb"; }
+elsif ( -x "$path/private/Xvfb" ) {
+    $xvfb = "$path/private/Xvfb";
+    $ENV{'LD_LIBRARY_PATH'} = "$path/../..";
+}
+
+die "could not find Xvfb binary..." unless $xvfb;
+exec($xvfb, @ARGV);
+
+
