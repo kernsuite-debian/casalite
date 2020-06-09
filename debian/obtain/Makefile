@@ -1,7 +1,7 @@
 .PHONY: all pack
 
-VERSION=5.4.1
-RELEASE=casa-release-${VERSION}-31.el7
+VERSION=5.6.0
+RELEASE=casa-release-${VERSION}-60.el7
 
 all: pack
 
