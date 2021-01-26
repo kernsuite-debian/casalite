@@ -1,3 +1,10 @@
+casalite (5.6.0-1kern1) focal; urgency=medium
+
+  [ Athanaseus Javas Ramaila ]
+  * Build for focal
+
+ --  KERN packaging <packaging@kernsuite.info>  Tue, 26 Jan 2021 09:26:40 +0000
+
 casalite (5.6.0-1) bionic; urgency=medium
 
   [ Gijs Molenaar ]
