@@ -1,3 +1,10 @@
+casalite (6.7.3.21-1kern1) noble; urgency=medium
+
+  [ Athanaseus Javas Ramaila ]
+  * New upstream version 6.7.3
+
+ -- KERN packaging <packaging@kernsuite.info>  Mon, 23 Feb 2026 12:40:58 +0200
+
 casalite (5.6.0-1kern2) focal; urgency=medium
                                              
   [ Athanaseus Javas Ramaila ]

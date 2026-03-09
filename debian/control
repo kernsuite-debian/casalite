@@ -2,31 +2,43 @@ Source: casalite
 Section: science
 Priority: optional
 Maintainer: Gijs Molenaar (launchpad ppa build key) <gijs@pythonic.nl>
-Build-Depends: debhelper (>= 10)
-Standards-Version: 4.5.0
+Uploaders: KERN packaging <packaging@kernsuite.info>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.2.0
 Homepage: https://casa.nrao.edu/casa_obtaining.shtml
 Vcs-Git: git://github.com/kernsuite-debian/casalite.git
 Vcs-Browser: https://github.com/kernsuite-debian/casalite
+X-Python3-Version: >= 3.12
 
 Package: casalite
 Architecture: any
-Depends: 
+Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ fuse,
  libfreetype6,
+ libfuse2t64,
+ libgoogle-perftools4,
  libsm6,
  libxi6,
  libxrender1,
  libxrandr2,
  libxfixes3,
+ libfftw3-single3,
+ libfftw3-double3,
  libxcursor1,
  libxinerama1,
  libfontconfig1,
  libxslt1.1,
+ libcanberra-gtk-module,
+ libcanberra-gtk3-module,
+ libgdk-pixbuf2.0-bin,
+ librsvg2-common,
+ python3-casaconfig,
  xauth,
  xvfb,
  dbus-x11,
- python-tk,
+ python3-tk,
  libgssapi-krb5-2
 Description: Common Astronomy Software Application
  this is the original binary distribution without CARTA and demo files

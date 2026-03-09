@@ -1,2 +1,4 @@
 version=4
-https://casa.nrao.edu/download/distro/linux/release/el7/casa-release-(.+).el7.tar.gz
+opts="filenamemangled=s/casa-(.+)\.tar\.xz/casa-$1.tar.xz/" \
+  https://casa.nrao.edu/download/distro/casa/release/rhel/ \
+  casa-([\d\.]+)-(\d+)-py3\.12\.el8\.tar\.xz

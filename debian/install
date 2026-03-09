@@ -1,9 +1,3 @@
 bin /opt/casalite
-data /opt/casalite
-etc /opt/casalite
-include /opt/casalite
-java /opt/casalite
 lib /opt/casalite
-plugins /opt/casalite
 share /opt/casalite
-xml /opt/casalite

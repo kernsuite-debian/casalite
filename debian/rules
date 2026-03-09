@@ -1,10 +1,61 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
+export APPTOOLS = casa casaplotserver casaplotms casatablebrowser casafeather casalogger
 export DH_VERBOSE=1
 
 %:
-	dh $@ 
+	dh $@
 
 override_dh_shlibdeps:
 	true
+
+override_dh_strip:
+	dh_strip --no-ddebs --exclude=.AppImage
+
+override_dh_dwz:
+	true
+
+override_dh_install:
+	dh_install
+	# Build reliable launchers for GUI tools on noble.
+	mkdir -p debian/casalite/opt/casalite/bin
+	for TOOL in $(APPTOOLS); do \
+		FILE="debian/casalite/opt/casalite/bin/$$TOOL"; \
+		printf '#!/bin/sh\n' > "$$FILE"; \
+		printf 'export PYTHONPATH=/opt/casalite/lib/py/lib/python3.12/site-packages:$${PYTHONPATH}\n' >> "$$FILE"; \
+		printf 'export LIBGL_ALWAYS_SOFTWARE=1\n' >> "$$FILE"; \
+		printf 'CASA_DATA_DIR=$$(python3 -m casaconfig --summary 2>/dev/null | grep "measurespath" | awk "{print \$$NF}" | tr -d "[:space:]")\n' >> "$$FILE"; \
+		printf '[ -z "$$CASA_DATA_DIR" ] || [ ! -d "$$CASA_DATA_DIR" ] && CASA_DATA_DIR="$$HOME/.casa/data"\n' >> "$$FILE"; \
+		printf 'if [ -z "$$CASA_DATA_DIR" ] || [ ! -d "$$CASA_DATA_DIR" ]; then\n' >> "$$FILE"; \
+		printf '    if [ -d "/opt/casalite/share/data" ]; then CASA_DATA_DIR="/opt/casalite/share/data";\n' >> "$$FILE"; \
+		printf '    else CASA_DATA_DIR="$$HOME/.casa/data"; fi\n' >> "$$FILE"; \
+		printf 'fi\n' >> "$$FILE"; \
+		printf 'if [ ! -z "$$CASA_DATA_DIR" ]; then\n' >> "$$FILE"; \
+		printf '    echo "measures.directory: $$CASA_DATA_DIR" > "$$HOME/.casa/.casarc"\n' >> "$$FILE"; \
+		printf 'fi\n' >> "$$FILE"; \
+		if [ "$$TOOL" = "casatablebrowser" ] || [ "$$TOOL" = "casaplotms" ]; then \
+			if [ "$$TOOL" = "casatablebrowser" ]; then \
+				printf 'if [ "$$1" = "--help" ] || [ "$$1" = "-h" ]; then echo "usage: casatablebrowser [TABLEDIR]"; exit 0; fi\n' >> "$$FILE"; \
+			fi; \
+			printf 'BINPATH="/opt/casalite/lib/py/lib/python3.12/site-packages/'"$$TOOL"'/__bin__/'"$$TOOL"'-x86_64.AppImage"\n' >> "$$FILE"; \
+			printf 'if [ -z "$$DISPLAY" ] && [ -z "$$WAYLAND_DISPLAY" ]; then\n' >> "$$FILE"; \
+			printf '    exec xvfb-run -a "$$BINPATH" --datapath="$$CASA_DATA_DIR" "$$@"\n' >> "$$FILE"; \
+			printf 'else\n' >> "$$FILE"; \
+			printf '    exec "$$BINPATH" --datapath="$$CASA_DATA_DIR" "$$@"\n' >> "$$FILE"; \
+			printf 'fi\n' >> "$$FILE"; \
+		else \
+			printf 'export PYTHONWARNINGS="ignore"\n' >> "$$FILE"; \
+			printf 'export GDK_PIXBUF_MODULE_FILE=/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache\n' >> "$$FILE"; \
+			case "$$TOOL" in \
+				casa)       CMD="/usr/bin/python3 -m casashell \"\$$@\"" ;; \
+				*)          CMD="/usr/bin/python3 -m \"$$TOOL\" \"\$$@\"" ;; \
+			esac; \
+			printf "exec $$CMD\n" >> "$$FILE"; \
+		fi; \
+		chmod 0755 "$$FILE"; \
+	done
+	# Remove bundled python binaries to avoid system conflicts.
+	rm -f debian/casalite/opt/casalite/bin/python3 \
+	      debian/casalite/opt/casalite/bin/pip3 \
+	      debian/casalite/opt/casalite/bin/2to3
